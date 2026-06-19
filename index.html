@@ -2,19 +2,23 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Fiesta Workspace Workspace</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AI Fiesta Workspace</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #111827; }
         ::-webkit-scrollbar-thumb { background: #374151; border-radius: 4px; }
+        
+        /* Ensures the textarea scrolls smoothly if it hits its max height */
+        textarea::-webkit-scrollbar { width: 4px; }
+        textarea::-webkit-scrollbar-track { background: transparent; }
     </style>
 </head>
-<body class="bg-gray-950 text-gray-100 font-sans h-screen flex overflow-hidden">
+<body class="bg-gray-950 text-gray-100 font-sans h-[100dvh] flex overflow-hidden">
 
-    <aside class="w-72 bg-gray-900 border-r border-gray-800 flex flex-col justify-between p-4 hidden md:flex z-10">
+    <aside class="w-72 bg-gray-900 border-r border-gray-800 flex flex-col justify-between p-4 hidden md:flex z-10 shrink-0">
         <div>
             <div class="flex items-center space-x-3 mb-8 px-2">
                 <div class="bg-indigo-600 p-2 rounded-lg text-white">
@@ -71,26 +75,26 @@
         </div>
     </aside>
 
-    <main class="flex-1 flex flex-col h-full overflow-hidden bg-gray-950 relative">
+    <main class="flex-1 flex flex-col h-full overflow-hidden bg-gray-950 relative w-full">
         
-        <header class="h-16 border-b border-gray-800 px-6 flex items-center justify-between bg-gray-900/40 backdrop-blur-md">
+        <header class="h-16 border-b border-gray-800 px-6 flex items-center justify-between bg-gray-900/40 backdrop-blur-md shrink-0">
             <h1 class="font-semibold text-gray-200 flex items-center space-x-2">
-                <span>Multi-Model Workspace Workspace</span>
+                <span>Multi-Model Workspace</span>
             </h1>
             <div class="flex items-center space-x-4">
                 <span class="text-xs text-green-400 flex items-center space-x-1.5 bg-green-950/50 border border-green-900 px-2.5 py-1 rounded-full">
                     <span class="w-2 h-2 rounded-full bg-green-400 inline-block animate-pulse"></span>
-                    <span>Systems Operational</span>
+                    <span class="hidden sm:inline">Systems Operational</span>
                 </span>
             </div>
         </header>
 
-        <div id="chat-workspace" class="flex-1 overflow-y-auto p-6 space-y-6">
-            <div id="welcome-panel" class="max-w-2xl mx-auto text-center my-12 space-y-4">
-                <h2 class="text-3xl font-extrabold text-white">One Prompt. Universal Answers.</h2>
-                <p class="text-gray-400 text-sm">Type a single query below. The workspace engine will split the dashboard open to fetch and print side-by-side completions asynchronously.</p>
+        <div id="chat-workspace" class="flex-1 overflow-y-auto p-4 md:p-6 space-y-6">
+            <div id="welcome-panel" class="max-w-2xl mx-auto text-center my-6 md:my-12 space-y-4">
+                <h2 class="text-2xl md:text-3xl font-extrabold text-white">One Prompt. Universal Answers.</h2>
+                <p class="text-gray-400 text-sm px-4">Type a single query below. The workspace engine will split the dashboard open to fetch and print side-by-side completions asynchronously.</p>
                 
-                <div class="grid grid-cols-2 gap-3 pt-6 text-left">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-6 text-left px-4">
                     <div onclick="fillSamplePrompt('Write an engaging social media post explaining quantum computing.')" class="p-4 bg-gray-900 border border-gray-800 rounded-xl cursor-pointer hover:border-indigo-500 transition">
                         <p class="text-xs font-semibold text-indigo-400 mb-1">Content Creation</p>
                         <p class="text-xs text-gray-300 line-clamp-2">"Write an engaging social media post explaining quantum computing..."</p>
@@ -105,7 +109,7 @@
             <div id="response-grid" class="grid gap-4 w-full"></div>
         </div>
 
-        <footer class="p-4 bg-gray-900/60 border-t border-gray-800 backdrop-blur-md">
+        <footer class="p-4 bg-gray-900/60 border-t border-gray-800 backdrop-blur-md shrink-0 w-full z-20 pb-safe">
             <div class="max-w-4xl mx-auto relative">
                 
                 <div class="flex items-center space-x-2 mb-2">
@@ -115,9 +119,18 @@
                     </button>
                 </div>
 
-                <div class="flex items-center space-x-3 bg-gray-800 border border-gray-700 focus-within:border-indigo-500 rounded-2xl p-2 transition">
-                    <input type="text" id="user-input" placeholder="Enter a comprehensive task instructions..." class="w-full bg-transparent border-0 focus:ring-0 outline-none text-sm text-white px-3 py-2">
-                    <button onclick="executeAiQuery()" class="bg-indigo-600 hover:bg-indigo-500 text-white w-10 h-10 rounded-xl flex items-center justify-center shadow-lg transition">
+                <div class="flex items-end space-x-3 bg-gray-800 border border-gray-700 focus-within:border-indigo-500 rounded-2xl p-2 transition">
+                    
+                    <textarea 
+                        id="user-input" 
+                        rows="1"
+                        placeholder="Enter comprehensive instructions... (Shift+Enter for new line)" 
+                        class="w-full bg-transparent border-0 focus:ring-0 outline-none text-sm text-white px-3 py-2 resize-none overflow-y-auto max-h-40"
+                        oninput="autoResize(this)"
+                        onkeydown="handleEnter(event)"
+                    ></textarea>
+
+                    <button onclick="executeAiQuery()" class="bg-indigo-600 hover:bg-indigo-500 text-white w-10 h-10 rounded-xl flex items-center justify-center shadow-lg transition shrink-0 mb-0.5">
                         <i class="fa-solid fa-paper-plane text-sm"></i>
                     </button>
                 </div>
@@ -126,7 +139,6 @@
     </main>
 
     <script>
-        // Preset high-fidelity simulation responses
         const mockResponses = {
             gpt: "### ChatGPT-5 Response\n\nQuantum computing processes information using **qubits** ($|0\\rangle$ and $|1\\rangle$ simultaneously via superposition). This allows unparalleled parallelism.\n\n* **Pros:** Exponential processing power for cryptography and optimization structures.\n* **Cons:** Massive thermal control architectures are mandatory.",
             claude: "### Claude 4 Sonnet Response\n\nImagine a standard computing chip checking maze paths one by one. A quantum chip drops water down the maze to map out all routes simultaneously. By operating within unified spaces, it rewrites software logic mechanics entirely.\n\n* Focus: Elegant system layout clarity\n* Efficiency Matrix: Enhanced code compilation tracking capabilities.",
@@ -134,36 +146,58 @@
             deepseek: "### DeepSeek V3 Response\n\nExecuting architecture calculations for requested problem profile:\n- Core design runs via custom reasoning pathways.\n- Provides deep diagnostic processing benchmarks at a fraction of standard energy footprints.\n- Ready to generate explicit script layouts based on this foundational logic structure."
         };
 
+        // Automatically expands the textarea height as the user types
+        function autoResize(element) {
+            element.style.height = 'auto';
+            element.style.height = (element.scrollHeight) + 'px';
+        }
+
+        // Submits the prompt on 'Enter', but allows 'Shift+Enter' for line breaks
+        function handleEnter(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault(); // Prevents adding a new line
+                executeAiQuery();
+            }
+        }
+
         function fillSamplePrompt(text) {
-            document.getElementById('user-input').value = text;
+            const inputField = document.getElementById('user-input');
+            inputField.value = text;
+            autoResize(inputField); // Adjust height for the new text
         }
 
         function boostPrompt() {
             let inputField = document.getElementById('user-input');
             if(inputField.value.trim() === "") {
-                inputField.value = "Provide an expert analysis detailing: ";
+                inputField.value = "Provide an expert analysis detailing: \n";
             } else {
-                inputField.value = "[Act as an Expert Specialist] Optimize and analyze the following objective: " + inputField.value;
+                inputField.value = "[Act as an Expert Specialist] Optimize and analyze the following objective:\n" + inputField.value;
             }
+            autoResize(inputField); // Adjust height after boosting
+            inputField.focus();
         }
 
         function resetWorkspace() {
             document.getElementById('response-grid').innerHTML = "";
             document.getElementById('welcome-panel').classList.remove('hidden');
-            document.getElementById('user-input').value = "";
+            const inputField = document.getElementById('user-input');
+            inputField.value = "";
+            inputField.style.height = 'auto'; // Reset text box height
         }
 
         function executeAiQuery() {
-            const prompt = document.getElementById('user-input').value.trim();
+            const inputField = document.getElementById('user-input');
+            const prompt = inputField.value.trim();
             if (!prompt) return;
 
-            // Hide the application welcome panel
-            document.getElementById('welcome-panel').classList.add('hidden');
-            
-            const grid = document.getElementById('response-grid');
-            grid.innerHTML = ""; // Wipe past response instances
+            // Reset text area size after submitting
+            inputField.value = "";
+            inputField.style.height = 'auto';
 
-            // Compute tracking requirements based on toggle switches
+            document.getElementById('welcome-panel').classList.add('hidden');
+            const grid = document.getElementById('response-grid');
+            grid.innerHTML = ""; 
+
             const activeModels = [];
             if(document.getElementById('check-gpt').checked) activeModels.push({ id: 'gpt', name: 'ChatGPT-5 Plus', icon: 'fa-bolt text-green-400', bg: 'border-green-900/30' });
             if(document.getElementById('check-claude').checked) activeModels.push({ id: 'claude', name: 'Claude 4 Sonnet', icon: 'fa-brain text-orange-400', bg: 'border-orange-900/30' });
@@ -176,12 +210,10 @@
                 return;
             }
 
-            // Adjust grid layout dynamically depending on the count of checked panels
             if (activeModels.length === 1) grid.className = "grid grid-cols-1 gap-4 w-full";
             else if (activeModels.length === 2) grid.className = "grid grid-cols-1 lg:grid-cols-2 gap-4 w-full";
             else grid.className = "grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 w-full";
 
-            // Inject workspace container boxes for each active model
             activeModels.forEach(model => {
                 const card = document.createElement('div');
                 card.className = `bg-gray-900 border ${model.bg} rounded-2xl p-5 flex flex-col h-[450px] shadow-2xl`;
@@ -201,13 +233,10 @@
                     </div>
                 `;
                 grid.appendChild(card);
-                
-                // Trigger typing layout simulation
                 simulateStreamingResponse(model.id);
             });
         }
 
-        // Simulates the classic character typing completion effect matching production AI platforms
         function simulateStreamingResponse(modelId) {
             const target = document.getElementById(`text-target-${modelId}`);
             const completeText = mockResponses[modelId] || "Response streaming complete.";
@@ -218,14 +247,14 @@
                 if (index < completeText.length) {
                     target.innerHTML += completeText.charAt(index);
                     index++;
-                    // Keep auto-scrolling down active container box as characters render
                     target.scrollTop = target.scrollHeight;
                 } else {
                     clearInterval(typingInterval);
                 }
-            }, Math.floor(Math.random() * 15) + 5); // Fluid variable typing speeds
+            }, Math.floor(Math.random() * 15) + 5); 
         }
     </script>
 </body>
 </html>
+
 
