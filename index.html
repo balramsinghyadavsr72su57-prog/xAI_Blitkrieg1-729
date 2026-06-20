@@ -71,7 +71,7 @@
         </div>
 
         <div class="pt-4 border-t border-gray-800 text-xs text-gray-500 text-center">
-            Built using Frontend Stack &bull; Multi-AI Core
+            Dynamic Frontend Simulator &bull; v2.0
         </div>
     </aside>
 
@@ -84,7 +84,7 @@
             <div class="flex items-center space-x-4">
                 <span class="text-xs text-green-400 flex items-center space-x-1.5 bg-green-950/50 border border-green-900 px-2.5 py-1 rounded-full">
                     <span class="w-2 h-2 rounded-full bg-green-400 inline-block animate-pulse"></span>
-                    <span class="hidden sm:inline">Systems Operational</span>
+                    <span class="hidden sm:inline">Dynamic Systems Ready</span>
                 </span>
             </div>
         </header>
@@ -92,16 +92,16 @@
         <div id="chat-workspace" class="flex-1 overflow-y-auto p-4 md:p-6 space-y-6">
             <div id="welcome-panel" class="max-w-2xl mx-auto text-center my-6 md:my-12 space-y-4">
                 <h2 class="text-2xl md:text-3xl font-extrabold text-white">One Prompt. Universal Answers.</h2>
-                <p class="text-gray-400 text-sm px-4">Type a single query below. The workspace engine will split the dashboard open to fetch and print side-by-side completions asynchronously.</p>
+                <p class="text-gray-400 text-sm px-4">Type any query below. The new dynamic engine will read your prompt and generate custom simulated responses side-by-side.</p>
                 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-6 text-left px-4">
-                    <div onclick="fillSamplePrompt('Write an engaging social media post explaining quantum computing.')" class="p-4 bg-gray-900 border border-gray-800 rounded-xl cursor-pointer hover:border-indigo-500 transition">
-                        <p class="text-xs font-semibold text-indigo-400 mb-1">Content Creation</p>
-                        <p class="text-xs text-gray-300 line-clamp-2">"Write an engaging social media post explaining quantum computing..."</p>
+                    <div onclick="fillSamplePrompt('Write a python script to scrape a webpage.')" class="p-4 bg-gray-900 border border-gray-800 rounded-xl cursor-pointer hover:border-indigo-500 transition">
+                        <p class="text-xs font-semibold text-indigo-400 mb-1">Coding Task</p>
+                        <p class="text-xs text-gray-300 line-clamp-2">"Write a python script to scrape a webpage..."</p>
                     </div>
-                    <div onclick="fillSamplePrompt('Explain the difference between SQL and NoSQL databases with pros and cons.')" class="p-4 bg-gray-900 border border-gray-800 rounded-xl cursor-pointer hover:border-indigo-500 transition">
-                        <p class="text-xs font-semibold text-emerald-400 mb-1">Software Architecture</p>
-                        <p class="text-xs text-gray-300 line-clamp-2">"Explain the difference between SQL and NoSQL databases..."</p>
+                    <div onclick="fillSamplePrompt('What are the psychological effects of social media?')" class="p-4 bg-gray-900 border border-gray-800 rounded-xl cursor-pointer hover:border-indigo-500 transition">
+                        <p class="text-xs font-semibold text-emerald-400 mb-1">Deep Research</p>
+                        <p class="text-xs text-gray-300 line-clamp-2">"What are the psychological effects of social media?"</p>
                     </div>
                 </div>
             </div>
@@ -120,11 +120,10 @@
                 </div>
 
                 <div class="flex items-end space-x-3 bg-gray-800 border border-gray-700 focus-within:border-indigo-500 rounded-2xl p-2 transition">
-                    
                     <textarea 
                         id="user-input" 
                         rows="1"
-                        placeholder="Enter comprehensive instructions... (Shift+Enter for new line)" 
+                        placeholder="Ask anything... (Shift+Enter for new line)" 
                         class="w-full bg-transparent border-0 focus:ring-0 outline-none text-sm text-white px-3 py-2 resize-none overflow-y-auto max-h-40"
                         oninput="autoResize(this)"
                         onkeydown="handleEnter(event)"
@@ -139,23 +138,58 @@
     </main>
 
     <script>
-        const mockResponses = {
-            gpt: "### ChatGPT-5 Response\n\nQuantum computing processes information using **qubits** ($|0\\rangle$ and $|1\\rangle$ simultaneously via superposition). This allows unparalleled parallelism.\n\n* **Pros:** Exponential processing power for cryptography and optimization structures.\n* **Cons:** Massive thermal control architectures are mandatory.",
-            claude: "### Claude 4 Sonnet Response\n\nImagine a standard computing chip checking maze paths one by one. A quantum chip drops water down the maze to map out all routes simultaneously. By operating within unified spaces, it rewrites software logic mechanics entirely.\n\n* Focus: Elegant system layout clarity\n* Efficiency Matrix: Enhanced code compilation tracking capabilities.",
-            gemini: "### Gemini 2.5 Pro Response\n\nBased on cross-referenced data arrays, quantum systems change processing limitations completely:\n\n1. **Superposition:** Systems can compute beyond binary limits.\n2. **Entanglement:** Connected states across components speed up memory transfer protocols.\n\n*Applications include deep pharmaceutical testing simulations and global logistics mapping.*",
-            deepseek: "### DeepSeek V3 Response\n\nExecuting architecture calculations for requested problem profile:\n- Core design runs via custom reasoning pathways.\n- Provides deep diagnostic processing benchmarks at a fraction of standard energy footprints.\n- Ready to generate explicit script layouts based on this foundational logic structure."
-        };
+        // ----------------------------------------------------------------------
+        // NEW DYNAMIC RESPONSE GENERATOR ENGINE
+        // ----------------------------------------------------------------------
+        function generateDynamicResponse(modelId, rawPrompt) {
+            // Trim the prompt for display in the response so it doesn't break formatting if it's too long
+            const safePrompt = rawPrompt.length > 50 ? rawPrompt.substring(0, 50) + "..." : rawPrompt;
+            
+            // Randomizer to pick different response styles
+            const rand = Math.floor(Math.random() * 2);
 
-        // Automatically expands the textarea height as the user types
+            if (modelId === 'gpt') {
+                const templates = [
+                    `### ChatGPT-5 Plus\n\nI have analyzed your request regarding: **"${safePrompt}"**\n\nHere is a structured breakdown of how to approach this:\n1. **Core Concept:** First, identify the primary variables.\n2. **Execution:** Ensure your methodology follows standard logical constraints.\n\n*Would you like me to expand on any specific part of this or provide an example?*`,
+                    `### ChatGPT-5 Plus\n\nTo address your query: "${safePrompt}"\n\n* **Strengths:** This is a well-defined objective.\n* **Challenges:** You must account for potential edge cases in execution.\n\nLet me know if you want me to draft a full structured document based on these parameters.`
+                ];
+                return templates[rand];
+            } 
+            else if (modelId === 'claude') {
+                const templates = [
+                    `### Claude 4 Sonnet\n\nThinking deeply about your prompt: *"${safePrompt}"*\n\nLet's unpack the nuances here. From a systemic perspective, the most important aspect to consider is the underlying architecture and human impact of this request. \n\n* **Focus:** Clarity, nuance, and elegant design.\n* **Insight:** Always prioritize safe and robust frameworks.`,
+                    `### Claude 4 Sonnet\n\nI've read through your instructions regarding **"${safePrompt}"**.\n\nBefore jumping straight into a solution, it's worth noting the contextual subtleties. I recommend approaching this holistically to ensure all perspectives are addressed. Shall we refine the exact constraints together?`
+                ];
+                return templates[rand];
+            } 
+            else if (modelId === 'gemini') {
+                const templates = [
+                    `### Gemini 2.5 Pro\n\nCross-referencing integrated web context and live data arrays for: **"${safePrompt}"**\n\nBased on real-time systems, here is the optimal approach:\n\n- **Integration:** High-concurrency operations should be decoupled natively.\n- **Actionable Data:** Leveraging integrated Google Workspace memory handles these processing bottlenecks smoothly.`,
+                    `### Gemini 2.5 Pro\n\nQuery received and indexed: "${safePrompt}"\n\nMy multi-modal parameters indicate that the fastest resolution to this involves leveraging interconnected data streams. I have formatted the optimal pathway for your review.`
+                ];
+                return templates[rand];
+            } 
+            else if (modelId === 'deepseek') {
+                const templates = [
+                    `### DeepSeek V3\n\nExecuting architecture calculations for requested profile: \n\`${safePrompt}\`\n\n- Core logic runs via custom mathematical reasoning pathways.\n- Pre-computing structural variables will cut your execution cost profiles by 40%.\n\n*Terminal diagnostic complete.*`,
+                    `### DeepSeek V3\n\nInitializing direct processing for: ${safePrompt}\n\nWarning: High-efficiency execution mode engaged. Bypassing redundant conversational fluff to deliver raw, logical analytical output metrics.`
+                ];
+                return templates[rand];
+            }
+            return "Response generated.";
+        }
+
+        // ----------------------------------------------------------------------
+        // UI & EVENT HANDLING LOGIC
+        // ----------------------------------------------------------------------
         function autoResize(element) {
             element.style.height = 'auto';
             element.style.height = (element.scrollHeight) + 'px';
         }
 
-        // Submits the prompt on 'Enter', but allows 'Shift+Enter' for line breaks
         function handleEnter(event) {
             if (event.key === 'Enter' && !event.shiftKey) {
-                event.preventDefault(); // Prevents adding a new line
+                event.preventDefault(); 
                 executeAiQuery();
             }
         }
@@ -163,7 +197,7 @@
         function fillSamplePrompt(text) {
             const inputField = document.getElementById('user-input');
             inputField.value = text;
-            autoResize(inputField); // Adjust height for the new text
+            autoResize(inputField); 
         }
 
         function boostPrompt() {
@@ -173,7 +207,7 @@
             } else {
                 inputField.value = "[Act as an Expert Specialist] Optimize and analyze the following objective:\n" + inputField.value;
             }
-            autoResize(inputField); // Adjust height after boosting
+            autoResize(inputField); 
             inputField.focus();
         }
 
@@ -182,7 +216,7 @@
             document.getElementById('welcome-panel').classList.remove('hidden');
             const inputField = document.getElementById('user-input');
             inputField.value = "";
-            inputField.style.height = 'auto'; // Reset text box height
+            inputField.style.height = 'auto'; 
         }
 
         function executeAiQuery() {
@@ -190,7 +224,7 @@
             const prompt = inputField.value.trim();
             if (!prompt) return;
 
-            // Reset text area size after submitting
+            // Clear the input field but keep the prompt in memory to pass to our generator
             inputField.value = "";
             inputField.style.height = 'auto';
 
@@ -228,18 +262,24 @@
                     <div id="text-target-${model.id}" class="flex-1 overflow-y-auto text-sm text-gray-300 space-y-2 leading-relaxed whitespace-pre-line">
                         <span class="text-gray-500 italic flex items-center space-x-2">
                             <i class="fa-solid fa-circle-notch animate-spin"></i>
-                            <span>Awaiting stream buffer data...</span>
+                            <span>Analyzing prompt data...</span>
                         </span>
                     </div>
                 `;
                 grid.appendChild(card);
-                simulateStreamingResponse(model.id);
+                
+                // Pass the prompt to the streaming simulator
+                simulateStreamingResponse(model.id, prompt);
             });
         }
 
-        function simulateStreamingResponse(modelId) {
+        // Now accepts the user's prompt as an argument to generate dynamic text
+        function simulateStreamingResponse(modelId, prompt) {
             const target = document.getElementById(`text-target-${modelId}`);
-            const completeText = mockResponses[modelId] || "Response streaming complete.";
+            
+            // Get dynamically generated text based on the user's prompt
+            const completeText = generateDynamicResponse(modelId, prompt);
+            
             let index = 0;
             target.innerHTML = ""; 
 
@@ -256,5 +296,6 @@
     </script>
 </body>
 </html>
+
 
 
